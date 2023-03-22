@@ -12,8 +12,6 @@ func MiddlewareMetaInfo() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set(constant.RequestID, c.GetHeader(constant.RequestID))
 		c.Set(constant.RealIP, c.GetHeader(constant.RealIP))
-		s, _ := c.Cookie(constant.Language)
-		c.Set(constant.Language, s)
 		c.Header(constant.RequestID, c.GetHeader(constant.RequestID))
 
 		////TODO delete debug code

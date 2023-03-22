@@ -32,4 +32,17 @@ func Register(g *gin.Engine) {
 	g.Use(gin.Logger(), gin.Recovery(), handler.MiddlewareMetaInfo())
 
 	g.GET("/ping", handler.Ping)
+
+	user := g.Group("/user")
+	user.POST("/login", handler.UserLogin)
+	user.POST("/signup", handler.UserSignup)
+	user.POST("/logout", handler.MiddlewareAuthority(), handler.UserLogout)
+	user.POST("/update", handler.MiddlewareAuthority(), handler.UserUpdate)
+	user.GET("/detail", handler.UserDetail)
+	user.GET("/list", handler.UserList)
+
+	byeBye := g.Group("/bye_bye")
+	byeBye.Use(handler.MiddlewareAuthority())
+	byeBye.POST("create", handler.ByeByeCreate)
+	byeBye.GET("fetch_result", handler.ByeByeFetchResult)
 }
