@@ -6,6 +6,10 @@ func ByeByeCreate(c *gin.Context) {
 	OnSuccess(c, nil)
 }
 
-func ByeByeFetchResult(c *gin.Context) {
+func ByeByeCheckResult(c *gin.Context) {
+	OnSuccess(c, nil)
+}
+
+func ByeByeNextQuestion(c *gin.Context) {
 	OnSuccess(c, nil)
 }

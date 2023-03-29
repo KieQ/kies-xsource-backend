@@ -43,6 +43,7 @@ func Register(g *gin.Engine) {
 
 	byeBye := g.Group("/bye_bye")
 	byeBye.Use(handler.MiddlewareAuthority())
-	byeBye.POST("create", handler.ByeByeCreate)
-	byeBye.GET("fetch_result", handler.ByeByeFetchResult)
+	byeBye.POST("/create", handler.ByeByeCreate)
+	byeBye.GET("/check_result", handler.ByeByeCheckResult)
+	byeBye.GET("/next_question", handler.ByeByeNextQuestion)
 }
