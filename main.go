@@ -2,13 +2,16 @@ package main
 
 import (
 	"fmt"
+	"kies-xsource-backend/handler"
+	"kies-xsource-backend/model/db"
+	"os"
+
 	"github.com/Kidsunbo/kie_toolbox_go/logs"
 	"github.com/gin-gonic/gin"
-	"kies-xsource-backend/handler"
-	"os"
 )
 
 func main() {
+	db.MustInit()
 	StartServer()
 }
 
@@ -41,9 +44,11 @@ func Register(g *gin.Engine) {
 	user.GET("/detail", handler.UserDetail)
 	user.GET("/list", handler.UserList)
 
-	byeBye := g.Group("/bye_bye")
-	byeBye.Use(handler.MiddlewareAuthority())
-	byeBye.POST("/create", handler.ByeByeCreate)
-	byeBye.GET("/check_result", handler.ByeByeCheckResult)
-	byeBye.GET("/next_question", handler.ByeByeNextQuestion)
+	afterSale := g.Group("/after_sale")
+	afterSale.Use(handler.MiddlewareAuthority())
+	afterSale.POST("/start_voyage", handler.AfterSaleStartVoyage)
+	afterSale.POST("/start_over", handler.AfterSaleStartOver)
+	afterSale.GET("/check_result", handler.AfterSaleCheckResult)
+	afterSale.GET("/next_step", handler.AfterSaleNextStep)
+	afterSale.GET("/final_reward", handler.AfterSaleFinalReward)
 }

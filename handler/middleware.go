@@ -26,7 +26,7 @@ func MiddlewareAuthority() gin.HandlerFunc {
 		tokenStr, err := c.Cookie(constant.Token)
 		if err != nil {
 			logs.CtxWarn(c, "failed to get token, err=%v", err)
-			OnFail(c, constant.UserNotLogin)
+			OnFail(c, constant.StatusCodeUserNotLogin)
 			c.Abort()
 			return
 		}
@@ -35,7 +35,7 @@ func MiddlewareAuthority() gin.HandlerFunc {
 		claims, err := service.ValidateToken(tokenStr)
 		if err != nil {
 			logs.CtxWarn(c, "failed to validate token, err=%v", err)
-			OnFail(c, constant.UserNotLogin)
+			OnFail(c, constant.StatusCodeUserNotLogin)
 			c.Abort()
 			return
 		}
@@ -43,7 +43,7 @@ func MiddlewareAuthority() gin.HandlerFunc {
 		//get account from JWT, if success, set with key account
 		if val, err := utils.GetFromAnyMap[string](claims, constant.Account); err != nil {
 			logs.CtxWarn(c, "JWT does not contain %v, err=%v", constant.Account, err)
-			OnFail(c, constant.UserNotLogin)
+			OnFail(c, constant.StatusCodeUserNotLogin)
 			c.Abort()
 			return
 		} else {
@@ -53,13 +53,13 @@ func MiddlewareAuthority() gin.HandlerFunc {
 		//get the request ip and check the IP
 		if val, err := utils.GetFromAnyMap[string](claims, constant.TokenIP); err != nil {
 			logs.CtxWarn(c, "JWT does not contain %v, err=%v", constant.TokenIP, err)
-			OnFail(c, constant.UserNotLogin)
+			OnFail(c, constant.StatusCodeUserNotLogin)
 			c.Abort()
 			return
 		} else if val != c.GetHeader(constant.RealIP) {
 			logs.CtxWarn(c, "user ip has changed from %v to %v", val, c.GetHeader(constant.RealIP))
 			c.SetCookie(constant.Token, "", -1, "/", "", false, false)
-			OnFail(c, constant.UserIPChanged)
+			OnFail(c, constant.StatusCodeUserIPChanged)
 			c.Abort()
 			return
 		}

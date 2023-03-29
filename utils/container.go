@@ -6,12 +6,13 @@ import (
 	"reflect"
 )
 
-func AddToMap[K comparable, V any, M map[K]any](m M, v *V, k K) {
+func AddToMapIfNotNil[K comparable, V any, M map[K]any](m M, v *V, k K) {
 	if v == nil {
 		return
 	}
 	m[k] = *v
 }
+
 
 func GetFromAnyMap[T any, K comparable](m map[K]any, k K) (T, error) {
 	var result T
@@ -34,15 +35,6 @@ func Sample[T any](samples []T, count int) []T {
 		result = append(result, samples[v])
 	}
 	return result
-}
-
-func Contain[T comparable](items []T, value T) bool {
-	for _, item := range items {
-		if item == value {
-			return true
-		}
-	}
-	return false
 }
 
 func UniqueBy[T any, K comparable](items []T, f func(T) K) []T {
