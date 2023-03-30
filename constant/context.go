@@ -5,5 +5,5 @@ package constant
 const (
 	RequestID = "X-Request-ID"
 	RealIP    = "X-Real-IP"
-	Account   = "account"
+	UserID    = "user_id"
 )

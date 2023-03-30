@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"github.com/Kidsunbo/kie_toolbox_go/logs"
-	"github.com/gin-gonic/gin"
 	"kies-xsource-backend/constant"
 	"kies-xsource-backend/service"
 	"kies-xsource-backend/utils"
+
+	"github.com/Kidsunbo/kie_toolbox_go/logs"
+	"github.com/gin-gonic/gin"
 )
 
 func MiddlewareMetaInfo() gin.HandlerFunc {
@@ -40,14 +41,14 @@ func MiddlewareAuthority() gin.HandlerFunc {
 			return
 		}
 
-		//get account from JWT, if success, set with key account
-		if val, err := utils.GetFromAnyMap[string](claims, constant.Account); err != nil {
-			logs.CtxWarn(c, "JWT does not contain %v, err=%v", constant.Account, err)
+		//get user_id from JWT, if success, set with key user_id
+		if val, err := utils.GetFromAnyMap[float64](claims, constant.UserID); err != nil {
+			logs.CtxWarn(c, "JWT does not contain %v, err=%v", constant.UserID, err)
 			OnFail(c, constant.StatusCodeUserNotLogin)
 			c.Abort()
 			return
 		} else {
-			c.Set(constant.Account, val)
+			c.Set(constant.UserID, int64(val))
 		}
 
 		//get the request ip and check the IP

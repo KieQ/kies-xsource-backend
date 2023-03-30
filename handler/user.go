@@ -27,7 +27,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	service.SetToken(c, req.Account, req.RememberMe, c.GetHeader(constant.RealIP))
+	service.SetToken(c, resp.UserID, req.RememberMe, c.GetHeader(constant.RealIP))
 	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
 	OnSuccess(c, resp)
 }
@@ -42,7 +42,7 @@ func UserSignup(c *gin.Context) {
 	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
 
 	resp, sc, err := service.UserSignup(c, &req)
-	if err != nil{
+	if err != nil {
 		logs.CtxWarn(c, "failed to sign up, err=%v", err)
 		OnFailWithMessage(c, sc, err.Error())
 		return
@@ -54,9 +54,9 @@ func UserSignup(c *gin.Context) {
 
 func UserLogout(c *gin.Context) {
 
-	account := c.GetString(constant.Account)
+	userID := c.GetInt64(constant.UserID)
 
-	logs.CtxInfo(c, "[ENTRY] %v logout", account)
+	logs.CtxInfo(c, "[ENTRY] %v logout", userID)
 
 	c.SetCookie(constant.Token, "", -1, "/", "", false, false)
 
@@ -74,14 +74,14 @@ func UserUpdate(c *gin.Context) {
 	}
 	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
 
-	if req.Account != c.GetString(constant.Account){
-		logs.CtxWarn(c, "account is not the same, account in request = %v, account in token = %v", req.Account, c.GetString(constant.Account))
+	if req.UserID != int32(c.GetInt64(constant.UserID)) {
+		logs.CtxWarn(c, "user_id is not the same, user_id in request = %v, user_id in token = %v", req.UserID, c.GetInt64(constant.UserID))
 		OnFail(c, constant.StatusCodeNoAuthority)
 		return
 	}
 
 	sc, err := service.UserUpdate(c, &req)
-	if err != nil{
+	if err != nil {
 		logs.CtxWarn(c, "failed to sign up, err=%v", err)
 		OnFailWithMessage(c, sc, err.Error())
 		return

@@ -22,7 +22,7 @@ func StartServer() {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
+	logs.Default().SetPathLength(2)
 	logs.Info("Server start with port %v", port)
 	server := gin.New()
 	Register(server)
@@ -41,8 +41,8 @@ func Register(g *gin.Engine) {
 	user.POST("/signup", handler.UserSignup)
 	user.POST("/logout", handler.MiddlewareAuthority(), handler.UserLogout)
 	user.POST("/update", handler.MiddlewareAuthority(), handler.UserUpdate)
-	user.GET("/detail", handler.UserDetail)
-	user.GET("/list", handler.UserList)
+	user.GET("/detail", handler.MiddlewareAuthority(), handler.UserDetail)
+	user.GET("/list", handler.MiddlewareAuthority(), handler.UserList)
 
 	afterSale := g.Group("/after_sale")
 	afterSale.Use(handler.MiddlewareAuthority())

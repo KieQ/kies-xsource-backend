@@ -12,7 +12,7 @@ type AfterSaleStartVoyageRequest struct {
 }
 
 type AfterSaleCreateResponse struct {
-	VoyageState AfterSaleStartVoyageResult `json:"voyage_state"`
+	VoyageStatus AfterSaleStartVoyageResult `json:"voyage_status"`
 }
 
 type AfterSaleStartOverRequest struct {
