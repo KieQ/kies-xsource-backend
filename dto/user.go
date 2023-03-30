@@ -47,19 +47,13 @@ type User struct {
 	CreateTime       int64   `json:"create_time"`
 }
 
-type UserDetailRequest struct {
-	UserID int32 `json:"user_id"`
-}
-
 type UserDetailResponse struct {
 	User
 }
 
-type UserListRequest struct {
-	Page int32 `json:"page"`
-	Size int32 `json:"size"`
-}
-
 type UserListResponse struct {
 	Users []*User `json:"users"`
+	Total int32   `json:"total"`
+	Page  int32   `json:"page"`
+	Size  int32   `json:"size"`
 }

@@ -1,3 +1,5 @@
+github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0 h1:QYCscJ6ccZ34WafFfz6SwxErmrYB6GiNRZM+J0foinA=
+github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0/go.mod h1:Qi8ffkS3ZuO9tECiGqsvr3aRaLVT+PTn6kEfTi6XqSw=
 github.com/Kidsunbo/kie_toolbox_go/logs v0.0.0-20230329094844-ce7ee8fa10e0 h1:hZDUBx0f138uLJSWIS/VTn8O3krwvh6t981EeskMtXA=
 github.com/Kidsunbo/kie_toolbox_go/logs v0.0.0-20230329094844-ce7ee8fa10e0/go.mod h1:ixSYlIQmTyB46sibvCJYnS/rt1U5NujHaSHSBR9VuHs=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
@@ -96,6 +98,7 @@ golang.org/x/net v0.7.0 h1:rJrUqqhjsgNp7KqAIc25s9pZnjU7TUcSY7HcVZjdn1g=
 golang.org/x/net v0.7.0/go.mod h1:2Tu9+aMcznHK/AK1HMvgo6xiTLG5rD5rZLDS+rp2Bjs=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
+golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=
 golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

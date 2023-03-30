@@ -8,8 +8,8 @@ import (
 
 var secretKey = os.Getenv("JWT_SECRET_KEY")
 
-func ValidateToken(tokenStr string) (map[string]interface{}, error) {
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+func ValidateToken(tokenStr string) (map[string]any, error) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return "", errors.New("invalid JWT method")
 		}
