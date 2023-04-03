@@ -13,7 +13,6 @@ func AddToMapIfNotNil[K comparable, V any, M map[K]any](m M, v *V, k K) {
 	m[k] = *v
 }
 
-
 func GetFromAnyMap[T any, K comparable](m map[K]any, k K) (T, error) {
 	var result T
 	var ok bool

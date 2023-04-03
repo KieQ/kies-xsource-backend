@@ -1,13 +1,12 @@
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS t_user (
     id serial PRIMARY KEY,
-    account VARCHAR(255) NOT NULL UNIQUE DEFAULT '',
+    email VARCHAR(50) NOT NULL UNIQUE DEFAULT '',
     password VARCHAR(255) NOT NULL DEFAULT '',
     nick_name VARCHAR(100) NOT NULL DEFAULT '',
-    profile VARCHAR(400) NOT NULL DEFAULT '',
+    profile TEXT NOT NULL DEFAULT '',
+    gender SMALLINT NOT NULL DEFAULT -1,
     phone VARCHAR(20) NOT NULL DEFAULT '',
-    email VARCHAR(30) NOT NULL DEFAULT '',
-    gender INTEGER NOT NULL DEFAULT -1,
-    self_introduction VARCHAR(500) NOT NULL DEFAULT '',
+    self_introduction TEXT NOT NULL DEFAULT '',
     create_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
     update_time TIMESTAMP NOT NULL DEFAULT current_timestamp
 );

@@ -7,12 +7,12 @@ import (
 )
 
 type Response struct {
-	StatusCode    int32       `json:"status_code"`
-	StatusMessage string      `json:"status_message"`
-	Data          interface{} `json:"data"`
+	StatusCode    int32  `json:"status_code"`
+	StatusMessage string `json:"status_message"`
+	Data          any    `json:"data"`
 }
 
-func OnSuccess(c *gin.Context, data interface{}) {
+func OnSuccess(c *gin.Context, data any) {
 	if data == nil {
 		data = struct{}{}
 	}

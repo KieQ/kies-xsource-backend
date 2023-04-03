@@ -6,6 +6,7 @@ import (
 	"kies-xsource-backend/service"
 	"kies-xsource-backend/utils"
 
+	"github.com/Kidsunbo/kie_toolbox_go/cast"
 	"github.com/Kidsunbo/kie_toolbox_go/logs"
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +28,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	service.SetToken(c, req.Account, req.RememberMe, c.GetHeader(constant.RealIP))
+	service.SetToken(c, resp.UserID, req.RememberMe, c.GetHeader(constant.RealIP))
 	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
 	OnSuccess(c, resp)
 }
@@ -42,7 +43,7 @@ func UserSignup(c *gin.Context) {
 	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
 
 	resp, sc, err := service.UserSignup(c, &req)
-	if err != nil{
+	if err != nil {
 		logs.CtxWarn(c, "failed to sign up, err=%v", err)
 		OnFailWithMessage(c, sc, err.Error())
 		return
@@ -54,9 +55,9 @@ func UserSignup(c *gin.Context) {
 
 func UserLogout(c *gin.Context) {
 
-	account := c.GetString(constant.Account)
+	userID := c.GetInt64(constant.UserID)
 
-	logs.CtxInfo(c, "[ENTRY] %v logout", account)
+	logs.CtxInfo(c, "[ENTRY] %v logout", userID)
 
 	c.SetCookie(constant.Token, "", -1, "/", "", false, false)
 
@@ -74,15 +75,15 @@ func UserUpdate(c *gin.Context) {
 	}
 	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
 
-	if req.Account != c.GetString(constant.Account){
-		logs.CtxWarn(c, "account is not the same, account in request = %v, account in token = %v", req.Account, c.GetString(constant.Account))
+	if req.UserID != int32(c.GetInt64(constant.UserID)) {
+		logs.CtxWarn(c, "user_id is not the same, user_id in request = %v, user_id in token = %v", req.UserID, c.GetInt64(constant.UserID))
 		OnFail(c, constant.StatusCodeNoAuthority)
 		return
 	}
 
 	sc, err := service.UserUpdate(c, &req)
-	if err != nil{
-		logs.CtxWarn(c, "failed to sign up, err=%v", err)
+	if err != nil {
+		logs.CtxWarn(c, "failed to update user, err=%v", err)
 		OnFailWithMessage(c, sc, err.Error())
 		return
 	}
@@ -93,9 +94,43 @@ func UserUpdate(c *gin.Context) {
 }
 
 func UserDetail(c *gin.Context) {
-	OnSuccess(c, nil)
+	userID, err := cast.To[int32](c.Query("user_id"))
+	if err != nil {
+		logs.CtxWarn(c, "failed to get query parameter, err=%v", err)
+		OnFail(c, constant.StatusCodeRequestParameterError)
+		return
+	}
+
+	logs.CtxInfo(c, "[ENTRY] userID=%v", userID)
+
+	resp, sc, err := service.UserDetail(c, userID)
+	if err != nil {
+		logs.CtxWarn(c, "failed to fetch user detail, err=%v", err)
+		OnFailWithMessage(c, sc, err.Error())
+		return
+	}
+
+	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
+	OnSuccess(c, resp)
 }
 
 func UserList(c *gin.Context) {
-	OnSuccess(c, nil)
+	page, errPage := cast.To[int32](c.Query("page"))
+	size, errSize := cast.To[int32](c.Query("size"))
+	if errPage != nil || errSize != nil {
+		logs.CtxWarn(c, "failed to get query parameter, errPage=%v, errSize=%v", errPage, errSize)
+		OnFail(c, constant.StatusCodeRequestParameterError)
+		return
+	}
+	logs.CtxInfo(c, "[ENTRY] page=%v, size=%v", page, size)
+
+	resp, sc, err := service.UserList(c, page, size)
+	if err != nil {
+		logs.CtxWarn(c, "failed to fetch user list, err=%v", err)
+		OnFailWithMessage(c, sc, err.Error())
+		return
+	}
+
+	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
+	OnSuccess(c, resp)
 }

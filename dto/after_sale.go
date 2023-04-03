@@ -1,41 +1,51 @@
 package dto
 
-type AfterSaleStartVoyageResult int64
+type AfterSaleVoyageCheckProgressResult int64
 
 const (
-	AfterSaleStartVoyageResultSuccess AfterSaleStartVoyageResult = iota
-	AfterSaleStartVoyageResultExist
-	AfterSaleStartVoyageResultFail
+	AfterSaleVoyageCheckProgressResultNeverStarted AfterSaleVoyageCheckProgressResult = iota
+	AfterSaleVoyageCheckProgressResultInTrip
+	AfterSaleVoyageCheckProgressResultPass
 )
 
-type AfterSaleStartVoyageRequest struct {
+type AfterSaleVoyageCheckProgressResponse struct {
+	UserID   int32                        `json:"user_id"`
+	Progress AfterSaleVoyageCheckProgressResult `json:"progress"`
+	Level    int8                         `json:"level"`
 }
 
-type AfterSaleCreateResponse struct {
-	VoyageState AfterSaleStartVoyageResult `json:"voyage_state"`
+type AfterSaleVoyageStartOrContinueTripRequest struct {
+	Level int8 `json:"level"`
 }
 
-type AfterSaleStartOverRequest struct {
+type AfterSaleVoyageStartOrContinueTripResponse struct {
+	Level int8 `json:"level"`
+	Passed bool `json:"passed"`
 }
 
-type AfterSaleStartOverResponse struct {
+type AfterSaleVoyageStartOverRequest struct {
+	Level int8 `json:"level"`
 }
 
-type AfterSaleCheckResultRequest struct {
+type AfterSaleVoyageStartOverResponse struct {
+	Level int8 `json:"level"`
 }
 
-type AfterSaleCheckResultResponse struct {
+type AfterSaleVoyageCheckResultRequest struct {
+}
+
+type AfterSaleVoyageCheckResultResponse struct {
 	Pass bool `json:"pass"`
 }
 
-type AfterSaleNextStepRequest struct {
+type AfterSaleVoyageNextStepRequest struct {
 }
 
-type AfterSaleNextStepResponse struct {
+type AfterSaleVoyageNextStepResponse struct {
 }
 
-type AfterSaleFinalRewardRequest struct {
+type AfterSaleVoyageFinalRewardRequest struct {
 }
 
-type AfterSaleFinalRewardResponse struct {
+type AfterSaleVoyageFinalRewardResponse struct {
 }

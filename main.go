@@ -22,7 +22,7 @@ func StartServer() {
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
+	logs.Default().SetPathLength(2)
 	logs.Info("Server start with port %v", port)
 	server := gin.New()
 	Register(server)
@@ -41,14 +41,15 @@ func Register(g *gin.Engine) {
 	user.POST("/signup", handler.UserSignup)
 	user.POST("/logout", handler.MiddlewareAuthority(), handler.UserLogout)
 	user.POST("/update", handler.MiddlewareAuthority(), handler.UserUpdate)
-	user.GET("/detail", handler.UserDetail)
-	user.GET("/list", handler.UserList)
+	user.GET("/detail", handler.MiddlewareAuthority(), handler.UserDetail)
+	user.GET("/list", handler.MiddlewareAuthority(), handler.UserList)
 
 	afterSale := g.Group("/after_sale")
 	afterSale.Use(handler.MiddlewareAuthority())
-	afterSale.POST("/start_voyage", handler.AfterSaleStartVoyage)
-	afterSale.POST("/start_over", handler.AfterSaleStartOver)
-	afterSale.GET("/check_result", handler.AfterSaleCheckResult)
-	afterSale.GET("/next_step", handler.AfterSaleNextStep)
-	afterSale.GET("/final_reward", handler.AfterSaleFinalReward)
+	afterSale.GET("/voyage/check_progress", handler.AfterSaleVoyageCheckProgress)
+	afterSale.POST("/voyage/start_or_continue_trip", handler.AfterSaleVoyageStartOrContinueTrip)
+	afterSale.POST("/voyage/start_over", handler.AfterSaleVoyageStartOver)
+	afterSale.GET("/voyage/check_result", handler.AfterSaleVoyageCheckResult)
+	afterSale.GET("/voyage/next_step", handler.AfterSaleVoyageNextStep)
+	afterSale.GET("/voyage/final_reward", handler.AfterSaleVoyageFinalReward)
 }
