@@ -1,5 +1,7 @@
 github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0 h1:QYCscJ6ccZ34WafFfz6SwxErmrYB6GiNRZM+J0foinA=
 github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0/go.mod h1:Qi8ffkS3ZuO9tECiGqsvr3aRaLVT+PTn6kEfTi6XqSw=
+github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230401132536-7a1ac5b32e32 h1:JjYsxHSvRJ/agVYlqTQTtDgWmnO1c1VWlRt+WwFA1h8=
+github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230401132536-7a1ac5b32e32/go.mod h1:Qi8ffkS3ZuO9tECiGqsvr3aRaLVT+PTn6kEfTi6XqSw=
 github.com/Kidsunbo/kie_toolbox_go/logs v0.0.0-20230329094844-ce7ee8fa10e0 h1:hZDUBx0f138uLJSWIS/VTn8O3krwvh6t981EeskMtXA=
 github.com/Kidsunbo/kie_toolbox_go/logs v0.0.0-20230329094844-ce7ee8fa10e0/go.mod h1:ixSYlIQmTyB46sibvCJYnS/rt1U5NujHaSHSBR9VuHs=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
