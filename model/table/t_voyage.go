@@ -23,3 +23,9 @@ const (
 	VoyageStatusPass
 	VoyageStatusFail
 )
+
+type VoyageRecord struct {
+	CreateTime time.Time `json:"create_time"`
+	Action string `json:"action"`
+	Extra map[string]any `json:"extra"`
+}

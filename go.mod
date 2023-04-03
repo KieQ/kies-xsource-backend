@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0 // indirect
+	github.com/Kidsunbo/kie_toolbox_go/cast v0.0.0-20230329152705-9f6e417c63f0
 	github.com/bytedance/sonic v1.8.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect

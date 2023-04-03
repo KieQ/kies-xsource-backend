@@ -46,9 +46,10 @@ func Register(g *gin.Engine) {
 
 	afterSale := g.Group("/after_sale")
 	afterSale.Use(handler.MiddlewareAuthority())
-	afterSale.POST("/start_voyage", handler.AfterSaleStartVoyage)
-	afterSale.POST("/start_over", handler.AfterSaleStartOver)
-	afterSale.GET("/check_result", handler.AfterSaleCheckResult)
-	afterSale.GET("/next_step", handler.AfterSaleNextStep)
-	afterSale.GET("/final_reward", handler.AfterSaleFinalReward)
+	afterSale.GET("/voyage/check_progress", handler.AfterSaleVoyageCheckProgress)
+	afterSale.POST("/voyage/start_or_continue_trip", handler.AfterSaleVoyageStartOrContinueTrip)
+	afterSale.POST("/voyage/start_over", handler.AfterSaleVoyageStartOver)
+	afterSale.GET("/voyage/check_result", handler.AfterSaleVoyageCheckResult)
+	afterSale.GET("/voyage/next_step", handler.AfterSaleVoyageNextStep)
+	afterSale.GET("/voyage/final_reward", handler.AfterSaleVoyageFinalReward)
 }

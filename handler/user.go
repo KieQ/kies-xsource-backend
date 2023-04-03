@@ -83,7 +83,7 @@ func UserUpdate(c *gin.Context) {
 
 	sc, err := service.UserUpdate(c, &req)
 	if err != nil {
-		logs.CtxWarn(c, "failed to sign up, err=%v", err)
+		logs.CtxWarn(c, "failed to update user, err=%v", err)
 		OnFailWithMessage(c, sc, err.Error())
 		return
 	}

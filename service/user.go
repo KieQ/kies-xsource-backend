@@ -33,7 +33,7 @@ func UserLogin(ctx context.Context, req *dto.UserLoginRequest) (*dto.UserLoginRe
 
 	if user.Password != req.Password {
 		logs.CtxWarn(ctx, "password is wrong")
-		return nil, constant.StatusCodeRequestParameterError, errors.New("账号或者密码错误，请检查后重试")
+		return nil, constant.StatusCodeRequestParameterError, errors.New("账号或者密码错误")
 	}
 
 	resp := &dto.UserLoginResponse{
