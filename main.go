@@ -49,7 +49,7 @@ func Register(g *gin.Engine) {
 	afterSale.GET("/voyage/check_progress", handler.AfterSaleVoyageCheckProgress)
 	afterSale.POST("/voyage/start_or_continue_trip", handler.AfterSaleVoyageStartOrContinueTrip)
 	afterSale.POST("/voyage/start_over", handler.AfterSaleVoyageStartOver)
-	afterSale.GET("/voyage/check_result", handler.AfterSaleVoyageCheckResult)
-	afterSale.GET("/voyage/next_step", handler.AfterSaleVoyageNextStep)
+	afterSale.POST("/voyage/check_result", handler.AfterSaleVoyageCheckResult)
+	afterSale.POST("/voyage/next_step", handler.AfterSaleVoyageNextStep)
 	afterSale.GET("/voyage/final_reward", handler.AfterSaleVoyageFinalReward)
 }

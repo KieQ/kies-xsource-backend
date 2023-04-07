@@ -81,11 +81,43 @@ func AfterSaleVoyageStartOver(c *gin.Context) {
 }
 
 func AfterSaleVoyageCheckResult(c *gin.Context) {
-	OnSuccess(c, nil)
+	req, err := utils.BindJSON[dto.AfterSaleVoyageCheckResultRequest](c)
+	if err != nil {
+		logs.CtxWarn(c, "failed to bind json, err=%v", err)
+		OnFail(c, constant.StatusCodeRequestParameterError)
+		return
+	}
+	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
+
+	resp, sc, err := service.AfterSaleVoyageCheckResult(c, &req)
+	if err != nil {
+		logs.CtxWarn(c, "failed to check result, err=%v", err)
+		OnFailWithMessage(c, sc, err.Error())
+		return
+	}
+
+	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
+	OnSuccess(c, resp)
 }
 
 func AfterSaleVoyageNextStep(c *gin.Context) {
-	OnSuccess(c, nil)
+	req, err := utils.BindJSON[dto.AfterSaleVoyageNextStepRequest](c)
+	if err != nil {
+		logs.CtxWarn(c, "failed to bind json, err=%v", err)
+		OnFail(c, constant.StatusCodeRequestParameterError)
+		return
+	}
+	logs.CtxInfo(c, "[ENTRY] request=%v", utils.ToJSON(req))
+
+	resp, sc, err := service.AfterSaleVoyageNextStep(c, &req)
+	if err != nil {
+		logs.CtxWarn(c, "failed to start next step, err=%v", err)
+		OnFailWithMessage(c, sc, err.Error())
+		return
+	}
+
+	logs.CtxInfo(c, "[EXIT] response=%v", utils.ToJSON(resp))
+	OnSuccess(c, resp)
 }
 
 func AfterSaleVoyageFinalReward(c *gin.Context) {

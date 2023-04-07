@@ -5,11 +5,10 @@ type AfterSaleVoyageCheckProgressResult int64
 const (
 	AfterSaleVoyageCheckProgressResultNeverStarted AfterSaleVoyageCheckProgressResult = iota
 	AfterSaleVoyageCheckProgressResultInTrip
-	AfterSaleVoyageCheckProgressResultPass
+	AfterSaleVoyageCheckProgressResultCleared
 )
 
 type AfterSaleVoyageCheckProgressResponse struct {
-	UserID   int32                        `json:"user_id"`
 	Progress AfterSaleVoyageCheckProgressResult `json:"progress"`
 	Level    int8                         `json:"level"`
 }
@@ -20,7 +19,8 @@ type AfterSaleVoyageStartOrContinueTripRequest struct {
 
 type AfterSaleVoyageStartOrContinueTripResponse struct {
 	Level int8 `json:"level"`
-	Passed bool `json:"passed"`
+	Cleared bool `json:"cleared"`
+	Seed int32 `json:"seed"`
 }
 
 type AfterSaleVoyageStartOverRequest struct {
@@ -29,19 +29,28 @@ type AfterSaleVoyageStartOverRequest struct {
 
 type AfterSaleVoyageStartOverResponse struct {
 	Level int8 `json:"level"`
+	Seed int32 `json:"seed"`
 }
 
 type AfterSaleVoyageCheckResultRequest struct {
+	Level int8 `json:"level"`
+	IV *string `json:"iv"`
+	Result *string `json:"result"`
 }
 
 type AfterSaleVoyageCheckResultResponse struct {
 	Pass bool `json:"pass"`
+	FailReason string `json:"fail_reason"`
 }
 
 type AfterSaleVoyageNextStepRequest struct {
+	FinishedLevel int8 `json:"finished_level"`
 }
 
 type AfterSaleVoyageNextStepResponse struct {
+	Level int8 `json:"level"`
+	Cleared bool `json:"cleared"`
+	Seed int32 `json:"seed"`
 }
 
 type AfterSaleVoyageFinalRewardRequest struct {
