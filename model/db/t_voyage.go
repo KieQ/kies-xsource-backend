@@ -38,7 +38,7 @@ func GetLatestVoyageByUserID(ctx context.Context, userID int32)(*table.Voyage, e
 	logs.CtxInfo(ctx, "[DB] user_id=%v", userID)
 
 	var voyage *table.Voyage
-	err := db.Table(table.NameVoyage).Where("user_id", userID).Last(&voyage).Error
+	err := db.Table(table.NameVoyage).Where("user_id", userID).Order("id DESC").Last(&voyage).Error
 	if err != nil{
 		return nil, err
 	}

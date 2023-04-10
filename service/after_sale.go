@@ -8,6 +8,7 @@ import (
 	"kies-xsource-backend/model/db"
 	"kies-xsource-backend/model/table"
 	"kies-xsource-backend/utils"
+	"math"
 	"math/rand"
 	"os"
 	"strconv"
@@ -219,6 +220,8 @@ func AfterSaleVoyageCheckResult(ctx context.Context, req *dto.AfterSaleVoyageChe
 
 	pass := false
 	failReason := ""
+	updateData := make(map[string]any)
+	recordExtra := make(map[string]any)
 	switch req.Level {
 	case 1:
 		if req.Result == nil || req.IV == nil {
@@ -232,7 +235,7 @@ func AfterSaleVoyageCheckResult(ctx context.Context, req *dto.AfterSaleVoyageChe
 			pass = true
 			break
 		}
-		for i := int64(1); i < 10; i++ {
+		for i := int64(1); !pass && i < 10; i++ {
 			keyLeft := utils.GenerateKey(now - i)
 			result, _ = utils.Decrypt(*req.Result, *req.IV, keyLeft[:])
 			if strconv.FormatInt(int64(voyage.Seed), 10) == result {
@@ -247,8 +250,9 @@ func AfterSaleVoyageCheckResult(ctx context.Context, req *dto.AfterSaleVoyageChe
 				break
 			}
 		}
-		if !pass {
+		if !pass{
 			failReason = "请求参数可能为伪造"
+			recordExtra["result"] = *req.Result
 		}
 	case 2:
 		if req.Result == nil {
@@ -260,43 +264,108 @@ func AfterSaleVoyageCheckResult(ctx context.Context, req *dto.AfterSaleVoyageChe
 		}
 		if !pass {
 			failReason = "结果不正确"
+			recordExtra["result"] = *req.Result
+		}
+	case 3:
+		if req.Result == nil{
+			logs.CtxWarn(ctx, "level 3 parameter is missing")
+			return nil, constant.StatusCodeRequestParameterError, errors.New("参数错误")
+		}
+		randomNumbers := random(voyage.Seed, 100)
+		var count int64= 0
+		for _, number := range randomNumbers{
+			if isPrime(number){
+				count++
+			}
+		}
+		if strconv.FormatInt(count, 10) == *req.Result{
+			pass=true
+		}
+		if !pass{
+			recordExtra["result"] = *req.Result
+			failReason = "结果不正确"
 		}
 	default:
 		logs.CtxWarn(ctx, "unknown level value %v", req.Level)
 		return nil, constant.StatusCodeRequestParameterError, errors.New("参数错误")
 	}
 
+	records, err := cast.JSONTo[[]*table.VoyageRecord](voyage.Records)
+	if err != nil {
+		logs.CtxWarn(ctx, "failed to parse records, err=%v", err)
+		return nil, constant.StatusCodeFailedToProcess, errors.New("解析探索日志失败")
+	}
+
 	if pass {
 		logs.CtxInfo(ctx, "user %v has passed level%v", userID, req.Level)
-
-		records, err := cast.JSONTo[[]*table.VoyageRecord](voyage.Records)
-		if err != nil {
-			logs.CtxWarn(ctx, "failed to parse records, err=%v", err)
-			return nil, constant.StatusCodeFailedToProcess, errors.New("解析探索日志失败")
-		}
-		now := time.Now()
 		records = append(records, &table.VoyageRecord{
-			CreateTime: now,
-			Action:     "pass",
+			CreateTime: time.Now(),
+			Action:     "check_success",
 		})
-
-		err = db.UpdateVoyage(ctx, voyage.ID, map[string]any{
-			"status":    table.VoyageStatusPass,
-			"records":   utils.ToJSON(records),
-			"pass_time": now,
-		})
-		if err != nil {
-			logs.CtxWarn(ctx, "failed to update voyage, err=%v", err)
-			return nil, constant.StatusCodeFailedToProcess, errors.New("更新当前探索进度失败")
-		}
+		updateData["status"] = table.VoyageStatusPass
+		updateData["records"] = utils.ToJSON(records)
 	} else {
 		logs.CtxInfo(ctx, "user %v has not passed level%v", userID, req.Level)
+		records = append(records, &table.VoyageRecord{
+			CreateTime: time.Now(),
+			Action:     "check_failed",
+			Extra:      recordExtra,
+		})
+		updateData["records"] = utils.ToJSON(records)
 	}
+
+	err = db.UpdateVoyage(ctx, voyage.ID, updateData)
+	if err != nil {
+		logs.CtxWarn(ctx, "failed to update voyage, err=%v", err)
+		return nil, constant.StatusCodeFailedToProcess, errors.New("更新当前探索进度失败")
+	}
+
 	resp := &dto.AfterSaleVoyageCheckResultResponse{
 		Pass:       pass,
 		FailReason: failReason,
 	}
+
+	if !pass && voyage.Level == constant.AfterSaleVoyageLevelCount{
+		_, sc, err := AfterSaleVoyageStartOver(ctx, int32(userID), int8(voyage.Level))
+		if err != nil{
+			logs.CtxWarn(ctx, "failed to start over voyage, err=%v", err)
+			return nil, sc, err
+		}
+		resp.StartedOver = true
+	}
+
 	return resp, constant.StatusCodeSuccess, nil
+}
+
+func random(seed int32, count int32) []int32 {
+	result := make([]int32, 0, count)
+
+	for i := int32(0); i < count; i++ {
+		seed ^= seed << 13
+		seed ^= seed >> 17
+		seed ^= seed << 5
+		result = append(result, int32(math.Abs(float64(seed)))%10000)
+	}
+	return result
+}
+
+func isPrime(n int32) bool {
+	if n <= 1 {
+		return false
+	}
+	if n == 2 || n == 3 {
+		return true
+	}
+	if n%2 == 0 {
+		return false
+	}
+	sqrtN := int(math.Sqrt(float64(n)))
+	for i := 3; i <= sqrtN; i += 2 {
+		if n%int32(i) == 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func AfterSaleVoyageNextStep(ctx context.Context, req *dto.AfterSaleVoyageNextStepRequest) (*dto.AfterSaleVoyageNextStepResponse, constant.StatusCode, error) {

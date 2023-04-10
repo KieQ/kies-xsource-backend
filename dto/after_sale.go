@@ -41,6 +41,7 @@ type AfterSaleVoyageCheckResultRequest struct {
 type AfterSaleVoyageCheckResultResponse struct {
 	Pass bool `json:"pass"`
 	FailReason string `json:"fail_reason"`
+	StartedOver bool `json:"started_over"`
 }
 
 type AfterSaleVoyageNextStepRequest struct {
